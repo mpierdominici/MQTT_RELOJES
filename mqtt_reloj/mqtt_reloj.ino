@@ -14,6 +14,8 @@
 #define PIN_GAUGE_2 D1
 #define PIN_GAUGE_3 D5
 #define PIN_GAUGE_4 D6
+#define PIN_LUCES_GAUGE D7
+
 
 int pir1State=0;
 int pir2State=0;
@@ -116,27 +118,47 @@ void callback(char* topic, byte* payload, unsigned int length)
   debug_message(", payload : ",false);
   debug_message((char *)payload,true);
 
-   int temp=message.toInt();
-   float t=0.0007*temp*temp*temp-0.0539*temp*temp+3.7*temp+0.7768;
-   t=(t/255.0)*1024;
-   temp=t;
+   if(!strcmp(topic,"gauge/l/on")){
+    digitalWrite(PIN_LUCES_GAUGE,HIGH);
+    
+   }
+   if(!strcmp(topic,"gauge/l/off")){
+    digitalWrite(PIN_LUCES_GAUGE,LOW);
+    
+   }
   
      
   
   if(!strcmp(topic,"gauge/1")){
+    int temp=message.toInt();
+   float t=0.0007*temp*temp*temp-0.0539*temp*temp+3.7*temp+0.7768;
+   t=(t/255.0)*1024;
+   temp=t;
      analogWrite(PIN_GAUGE_1,temp);
       
   }
 
     if(!strcmp(topic,"gauge/2")){
+      int temp=message.toInt();
+   float t=0.0007*temp*temp*temp-0.0539*temp*temp+3.7*temp+0.7768;
+   t=(t/255.0)*1024;
+   temp=t;
       analogWrite(PIN_GAUGE_2,temp);
       
   }
     if(!strcmp(topic,"gauge/3")){
+      int temp=message.toInt();
+   float t=0.0007*temp*temp*temp-0.0539*temp*temp+3.7*temp+0.7768;
+   t=(t/255.0)*1024;
+   temp=t;
       analogWrite(PIN_GAUGE_3,temp);
       
   }
     if(!strcmp(topic,"gauge/4")){
+      int temp=message.toInt();
+   float t=0.0007*temp*temp*temp-0.0539*temp*temp+3.7*temp+0.7768;
+   t=(t/255.0)*1024;
+   temp=t;
       analogWrite(PIN_GAUGE_4,temp);
       
   }
@@ -160,6 +182,8 @@ void reconnect()
             mqtt_client.subscribe("gauge/2");
             mqtt_client.subscribe("gauge/3");
             mqtt_client.subscribe("gauge/4");
+            mqtt_client.subscribe("gauge/l/on");
+            mqtt_client.subscribe("gauge/l/off");
       }
       else
       {
@@ -173,6 +197,7 @@ void setup() {
   Serial.begin(9600);
   setUpWifi(ssid,pass);
   setUpMqtt();
+  pinMode(PIN_LUCES_GAUGE,OUTPUT);
 }
 
 
