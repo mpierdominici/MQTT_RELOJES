@@ -15,6 +15,8 @@
 #define PIN_GAUGE_3 D5
 #define PIN_GAUGE_4 D6
 #define PIN_LUCES_GAUGE D7
+#define PIN_LUCES_EXT D8
+#define PIN_RELE D4
 
 
 int pir1State=0;
@@ -126,6 +128,25 @@ void callback(char* topic, byte* payload, unsigned int length)
     digitalWrite(PIN_LUCES_GAUGE,LOW);
     
    }
+
+
+   if(!strcmp(topic,"gauge/l/e/on")){
+    digitalWrite(PIN_LUCES_EXT,HIGH);
+    
+   }
+   if(!strcmp(topic,"gauge/l/e/off")){
+    digitalWrite(PIN_LUCES_EXT,LOW);
+    
+   }
+
+    if(!strcmp(topic,"gauge/r/on")){
+    digitalWrite(PIN_RELE,HIGH);
+    
+   }
+   if(!strcmp(topic,"gauge/r/off")){
+    digitalWrite(PIN_RELE,LOW);
+    
+   }
   
      
   
@@ -184,6 +205,10 @@ void reconnect()
             mqtt_client.subscribe("gauge/4");
             mqtt_client.subscribe("gauge/l/on");
             mqtt_client.subscribe("gauge/l/off");
+            mqtt_client.subscribe("gauge/l/e/on");
+            mqtt_client.subscribe("gauge/l/e/off");
+             mqtt_client.subscribe("gauge/r/on");
+            mqtt_client.subscribe("gauge/r/off");
       }
       else
       {
@@ -198,6 +223,8 @@ void setup() {
   setUpWifi(ssid,pass);
   setUpMqtt();
   pinMode(PIN_LUCES_GAUGE,OUTPUT);
+  pinMode(PIN_RELE,OUTPUT);
+  pinMode(PIN_LUCES_EXT,OUTPUT);
 }
 
 
